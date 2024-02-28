@@ -14,7 +14,7 @@ def get_user_name():
     Get the name of the player
     """
 
-    player = input('What is your name? ')
+    player = input('What is your name? ').capitalize()
     print(f'Hi {player}! Welcome to Tic Tac Toe')
 
 get_user_name()
