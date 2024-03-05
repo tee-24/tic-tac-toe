@@ -9,22 +9,10 @@
 # Is board full
 
 board_place = {1:'1', 2:'2', 3:'3', 4:'4', 5:'5', 6:'6', 7:'7', 8:'8', 9:'9'}
-
-def run_game():
-
-    get_user_name()
-
-    marker = get_user_marker()
-
-    display_board(board_place)
-
-    place_marker()
-
-    
-    
+play_game = True
 
 
-def place_marker(board_place, position, marker):
+def place_marker(board_place, position):
     """
     Place the marker on the board and display the board
     """
@@ -105,7 +93,21 @@ def computer_choice():
     return position 
 
 def check_winner():
-    pass
+    # Horizontal wins
+    if (board_place[1] == board_place[2] == board_place[3]) or (board_place[4] == board_place[5] == board_place[6]) or (board_place[7] == board_place[8] == board_place[9]):
+        print('game over')
+    # Verical wins
+    elif (board_place[1] == board_place[4] == board_place[7]) or (board_place[2] == board_place[5] == board_place[8]) or (board_place[3] == board_place[6] == board_place[9]):
+        print('game over')
+    # Diagonal wins
+    elif (board_place[1] == board_place[5] == board_place[9]) or (board_place[3] == board_place[5] == board_place[7]):
+        print('game over')
+
+def check_tie():
+    """
+    Checks if the board is full
+    """
+
 
 def play_again():
     """
@@ -124,4 +126,14 @@ def play_again():
 
     return answer 
 
-get_user_marker()
+while play_game == True:
+
+    get_user_name()
+
+    marker = get_user_marker()
+
+    display_board(board_place)
+
+    player_choice()
+
+    place_marker(board_place, player_choice())
