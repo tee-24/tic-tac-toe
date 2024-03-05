@@ -18,13 +18,19 @@ def run_game():
 
     display_board(board_place)
 
-    board_place[player_choice()] = marker
+    place_marker()
 
-    display_board(board_place)
+    
     
 
 
+def place_marker(board_place, position, marker):
+    """
+    Place the marker on the board and display the board
+    """
 
+    board_place[position] = marker
+    display_board(board_place)
 
 def get_user_name():
     """
@@ -34,16 +40,32 @@ def get_user_name():
     player = input('What is your name? ').capitalize()
     print(f'Hi {player}! Welcome to Tic Tac Toe')
 
+
 def get_user_marker():
     """
+    Get the markers for Player 1 and Player 2
     """
 
-    choice = input('Would you like to be X or O? ').upper()
+    choice = ''
+
     while choice not in ['X','O']:
-        print('Invalid choice, please choose X or O')
         choice = input('Would you like to be X or O? ').upper()
 
-    return choice 
+        if choice not in ['X','O']:
+            print('Invalid choice, please choose X or O')
+
+    if choice == 'X':
+        player1 = 'X'
+        player2 = 'O'
+        print('Player 1 is X')           
+        print('Player 2 is O')
+    else:
+        player1 = 'O'
+        player2 = 'X'
+        print('Player 1 is O')
+        print('Player 2 is X')
+
+    return player1, player2 
 
 
 def display_board(board_place):
@@ -58,15 +80,18 @@ def display_board(board_place):
 
 def player_choice():
 
-    position = int(input('Where would you like to play? '))
-    while position not in board_place:
-        print('Invalid choice, please choose a number from 1-9')
+    position = ''
+
+    while position not in board_place or board_place[position] in ['X', 'O']:
         position = int(input('Where would you like to play? '))
 
-    while board_place[position]=='X' or board_place[position]=='O':
-        print('That spot has been taken, please choose another number')
-        position = int(input('Where would you like to play? '))
+        if position not in board_place:
+            print('Invalid choice, please choose a number from 1-9')
 
+        elif board_place[position] in ['X', 'O']:
+            print('That spot has been taken, please choose another number')
+
+            # add argument for isdigit()
 
     return position 
 
@@ -79,5 +104,24 @@ def computer_choice():
 
     return position 
 
-board_place[7] = 'X'
-player_choice()
+def check_winner():
+    pass
+
+def play_again():
+    """
+    Ask if player would like to play again
+    """
+
+    answer = input('Do you want to play again? ').capitalize()
+    while answer not in ['Y', 'N', 'Yes', 'No']:
+        print("I'm sorry, I don't understand")
+        answer = input('Please type Yes or No: ').capitalize()
+
+    if answer in ['Y', 'Yes']:
+        print('Yay!')
+    else:
+        print('Thanks for playing!')
+
+    return answer 
+
+get_user_marker()
