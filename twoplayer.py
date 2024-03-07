@@ -17,6 +17,7 @@ play_game = True
 turn = 0
 
 
+
 def place_marker(board_place, position, marker):
     """
     Place the marker on the board 
@@ -27,21 +28,70 @@ def place_marker(board_place, position, marker):
 
     check_winner()
 
-def get_user_name():
+def get_player1_name():
     """
-    Get the name of the player
+    Get the name of Player 1
     """
-    player = ''
+    player1 = ''
 
-    while len(player) < 3 or not player.isalpha():
-        player = input('\nWhat is your name? ').capitalize()
+    while len(player1) < 3 or not player1.isalpha():
+        player1 = input('\nPlayer 1, enter your name: ').capitalize()
 
-        if player.isalpha() == False:
+        if player1.isalpha() == False:
             print('Name can only contain letters, please try again')
-        elif len(player) < 3:
+        elif len(player1) < 3:
             print('Name must be a minimum of 3 characters, please try again')
 
-    print(f'\nHi {player}!')
+    print(f'{player1} is Player 1')
+
+    return player1
+
+def get_player2_name():
+    """
+    Get the name of Player 2
+    """
+    player2 = ''
+
+    while len(player2) < 3 or not player2.isalpha():
+        player2 = input('\nPlayer 2, enter your name: ').capitalize()
+
+        if player2.isalpha() == False:
+            print('Name can only contain letters, please try again')
+        elif len(player2) < 3:
+            print('Name must be a minimum of 3 characters, please try again')
+        
+    print(f'{player2} is Player 2')
+
+    return player2
+
+    print(emoji.emojize(f'Hi {player1} and {player2}! Welcome to Tic Tac Toe :grinning_face_with_big_eyes:\n'))
+
+
+def get_user_marker():
+    """
+    Get the markers for Player 1 and Player 2
+    """
+
+    choice = ''
+
+    while choice not in ['X','O']:
+        choice = input('{playerWould you like to be X or O? ').upper()
+
+        if choice not in ['X','O']:
+            print('Invalid choice, please choose X or O')
+
+    if choice == 'X':
+        player1 = 'X'
+        player2 = 'O'
+        print('Player 1 is X')           
+        print('Player 2 is O')
+    else:
+        player1 = 'O'
+        player2 = 'X'
+        print('Player 1 is O')
+        print('Player 2 is X')
+
+    return player1, player2 
 
 def get_user_marker():
     """
@@ -50,7 +100,7 @@ def get_user_marker():
     choice = ''
 
     while choice not in ['X','O']:
-        choice = input('Would you like to be X or O? \n').upper()
+        choice = input('\nWould you like to be X or O? \n').upper()
 
         if choice not in ['X','O']:
             print('Invalid choice, please choose X or O\n')
@@ -163,31 +213,28 @@ def swap_turn(turn):
 
 def run_game():
 
-    print(emoji.emojize(f'Hello! Welcome to Tic Tac Toe :grinning_face_with_big_eyes:\n'))
-
-    print('First to get 3 in a row wins!')
-
     get_user_name()
 
-run_game()
+# run_game()
 
-while play_game == True:
+# while play_game == True:
 
-    user_marker = get_user_marker()
-    # Determine computer marker based on user's marker
-    if user_marker == 'X':
-        computer_marker = 'O'
-    else:
-        computer_marker = 'X'
+#     user_marker = get_user_marker()
+#     # Determine computer marker based on user's marker
+#     if user_marker == 'X':
+#         computer_marker = 'O'
+#     else:
+#         computer_marker = 'X'
 
 
-    display_board(board_place)
-    # Where the user wants to play
-    player_choice = player_choice()
-    # Where the computer wants to play
-    computer_choice = computer_choice()
-    # Changes turn
-    current_player = swap_turn(turn)
+#     display_board(board_place)
+#     # Where the user wants to play
+#     player_choice = player_choice()
+#     # Where the computer wants to play
+#     computer_choice = computer_choice()
+#     # Changes turn
+#     current_player = swap_turn(turn)
 
-    play_again()
+#     play_again()
 
+get_player1_name()
