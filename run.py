@@ -44,6 +44,7 @@ def get_user_name():
             print('Name must be a minimum of 3 characters, please try again')
 
     print(f'\nHi {player}!')
+    return player
 
 def get_user_marker():
     """
@@ -52,7 +53,7 @@ def get_user_marker():
     choice = ''
 
     while choice not in ['X','O']:
-        choice = input('Would you like to be X or O? \n').upper()
+        choice = input('Would you like to be X or O? ').upper()
 
         if choice not in ['X','O']:
             print('Invalid choice, please choose X or O\n')
@@ -76,14 +77,14 @@ def player_choice():
         try:
             position = int(input('Where would you like to play? '))
         except ValueError:
-            print('Invalid choice, please choose a number from 1-9')
+            print('\nInvalid choice, please choose a number from 1-9')
             continue
 
         if position not in board_place:
-            print('Invalid choice, please choose a number from 1-9')
+            print('\nInvalid choice, please choose a number from 1-9')
 
         elif board_place[position] in ['X', 'O']:
-            print('That spot has been taken, please choose another number')
+            print('\nThat spot has been taken, please choose another number')
 
             # add argument for isdigit()
 
@@ -125,12 +126,17 @@ def check_winner():
             board_place[3] == board_place[5] == board_place[7]):
         print('game over')
 
-def check_tie():
-    """
-    Checks if the board is full
-    """
-    if board_place[position] in ['X', 'O']:
-        print("It's a tie!")
+def check_tie(board_place):
+  """
+  Will return True if the board is full 
+  or will return False if the board is not full
+  """
+
+  for i in range(1,10):
+      if board_place[i] not in ['X','O']:
+        return False
+        
+  return True
 
 def play_again():
     """
@@ -158,10 +164,12 @@ def swap_turn(turn):
     """
     if turn % 2 == 0:
         return user_marker
+        turn+=1
     else:
         return computer_marker
+        turn+=1
     
-    turn+=1
+    
 
 def run_game():
 
@@ -182,7 +190,7 @@ while play_game == True:
     else:
         computer_marker = 'X'
 
-
+    print()
     display_board(board_place)
     # Where the user wants to play
     player_choice = player_choice()
@@ -190,6 +198,7 @@ while play_game == True:
     computer_choice = computer_choice()
     # Changes turn
     current_player = swap_turn(turn)
+    print(turn)
 
     play_again()
 
