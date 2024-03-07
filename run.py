@@ -112,13 +112,17 @@ def player_choice():
 
             # add argument for isdigit()
 
+    place_marker(board_place, position, user_marker)
+
     return position 
 
 def computer_choice():
 
-    print("Computer's turn...")
+    print("\nComputer's turn...\n")
 
     choice = random.randint(1,9)
+
+    place_marker(board_place, choice, computer_marker)
 
     return choice 
 
@@ -150,7 +154,8 @@ def check_tie():
     """
     Checks if the board is full
     """
-
+    if board_place[position] in ['X', 'O']:
+        print("It's a tie!")
 
 def play_again():
     """
@@ -167,12 +172,15 @@ def play_again():
         print("Great, let's play again!")
     else:
         print('Thanks for playing!')
-        play_game = False
+        exit()
 
     return answer 
 
 def swap_turn(turn):
-    
+    """
+    Return the user's marker if it the the user's turn
+    and return the computer's marker if it is the computer's turn
+    """
     if turn % 2 == 0:
         return user_marker
     else:
@@ -197,19 +205,20 @@ while play_game == True:
     get_user_name()
 
     user_marker = get_user_marker()
-
+    # Determine computer marker based on user's marker
     if user_marker == 'X':
         computer_marker = 'O'
     else:
         computer_marker = 'X'
 
+
     display_board(board_place)
-
+    # Where the user wants to play
     player_choice = player_choice()
+    # Where the computer wants to play
     computer_choice = computer_choice()
-    marker = swap_turn(turn)
-
-    place_marker(board_place, computer_choice, marker)
+    # Changes turn
+    current_player = swap_turn(turn)
 
     play_again()
 
