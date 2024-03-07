@@ -1,1 +1,2 @@
-# Your requirements go here
+colorama==0.4.6
+emoji==2.10.1
