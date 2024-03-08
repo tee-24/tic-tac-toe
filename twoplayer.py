@@ -1,32 +1,14 @@
-# Your code goes here.
-# You can delete these comments, but do not change the name of this file
-# Write your code to expect a terminal of 80 characters wide and 24 rows high
 
-# Get the player name
-# Display Board
-# Ask for user choice
-# Check for winner
 # Is board full
-
+import commons
 import emoji
 import random
+from colorama import Fore, Back, Style
 
-
-board_place = {1:'1', 2:'2', 3:'3', 4:'4', 5:'5', 6:'6', 7:'7', 8:'8', 9:'9'}
+# Global variables
+Board = {1:'1', 2:'2', 3:'3', 4:'4', 5:'5', 6:'6', 7:'7', 8:'8', 9:'9'}
 play_game = True
-turn = 0
 
-
-
-def place_marker(board_place, position, marker):
-    """
-    Place the marker on the board 
-    and display the board
-    """
-    board_place[position] = marker
-    display_board(board_place)
-
-    check_winner()
 
 def get_player1_name():
     """
@@ -34,13 +16,15 @@ def get_player1_name():
     """
     player1 = ''
 
-    while len(player1) < 3 or not player1.isalpha():
+    while len(player1) < 3 or not player1.isalpha() or len(player1) > 10:
         player1 = input('\nPlayer 1, enter your name: ').capitalize()
 
         if player1.isalpha() == False:
             print('Name can only contain letters, please try again')
         elif len(player1) < 3:
-            print('Name must be a minimum of 3 characters, please try again')
+            print('Name must be a minimum of 3 letters, please try again')
+        elif len(player1) > 10:
+            print('Name can only be a maximum of 10 letters, please try again')
 
     print(f'{player1} is Player 1')
 
@@ -52,189 +36,175 @@ def get_player2_name():
     """
     player2 = ''
 
-    while len(player2) < 3 or not player2.isalpha():
+    while len(player2) < 3 or not player2.isalpha() or len(player2) > 10:
         player2 = input('\nPlayer 2, enter your name: ').capitalize()
 
         if player2.isalpha() == False:
-            print('Name can only contain letters, please try again')
+            print(Fore.RED + 'Name can only contain letters, please try again')
+            print(Style.RESET_ALL)
         elif len(player2) < 3:
-            print('Name must be a minimum of 3 characters, please try again')
+            print(Fore.RED + 'Name must be a minimum of 3 letters, please try again')
+            print(Style.RESET_ALL)
+        elif len(player2) > 10:
+            print(Fore.RED + 'Name can only be a maximum of 10 letters, please try again')
+            print(Style.RESET_ALL)
         
     print(f'{player2} is Player 2')
 
     return player2
 
-    print(emoji.emojize(f'Hi {player1} and {player2}! Welcome to Tic Tac Toe :grinning_face_with_big_eyes:\n'))
 
-
-def get_user_marker():
+def get_player1_marker(player1, player2):
     """
-    Get the markers for Player 1 and Player 2
+    Get the markers for Player 1
     """
 
     choice = ''
 
     while choice not in ['X','O']:
-        choice = input('{playerWould you like to be X or O? ').upper()
+        choice = input(f'\n{player1}, would you like to be X or O? ').upper()
 
         if choice not in ['X','O']:
             print('Invalid choice, please choose X or O')
 
     if choice == 'X':
-        player1 = 'X'
-        player2 = 'O'
-        print('Player 1 is X')           
-        print('Player 2 is O')
+        print(f'{player1} is X')           
+        print(f'{player2} is O')
     else:
-        player1 = 'O'
-        player2 = 'X'
-        print('Player 1 is O')
-        print('Player 2 is X')
-
-    return player1, player2 
-
-def get_user_marker():
-    """
-    Get the markers for Player 1 and Player 2
-    """
-    choice = ''
-
-    while choice not in ['X','O']:
-        choice = input('\nWould you like to be X or O? \n').upper()
-
-        if choice not in ['X','O']:
-            print('Invalid choice, please choose X or O\n')
+        print(f'{player1} is O')
+        print(f'{player2} is X')
 
     return choice
 
-def display_board(board_place):
-    """
-    Print out the game board
-    """
-    print(f' {board_place[1]} | {board_place[2]} | {board_place[3]}')
-    print(f' {board_place[4]} | {board_place[5]} | {board_place[6]}')
-    print(f' {board_place[7]} | {board_place[8]} | {board_place[9]}')
-
-
-def player_choice():
+def player1_choice(player1_marker, player1):
 
     position = ''
 
-    while position not in board_place or board_place[position] in ['X', 'O']:
+    while position not in Board or Board[position] in ['X', 'O']:
         try:
-            position = int(input('Where would you like to play? '))
+            position = int(input(f'Where would you like to play {player1}? '))
         except ValueError:
             print('Invalid choice, please choose a number from 1-9')
             continue
 
-        if position not in board_place:
+        if position not in Board:
             print('Invalid choice, please choose a number from 1-9')
 
-        elif board_place[position] in ['X', 'O']:
+        elif Board[position] in ['X', 'O']:
             print('That spot has been taken, please choose another number')
 
-            # add argument for isdigit()
-
-    place_marker(board_place, position, user_marker)
+    place_marker(Board, position, player1_marker, player=True)
 
     return position 
 
-def computer_choice():
+def player2_choice(player2_marker, player2):
 
-    print("\nComputer's turn...\n")
+    position = ''
 
-    choice = random.randint(1,9)
+    while position not in Board or Board[position] in ['X', 'O']:
+        try:
+            position = int(input(f'Where would you like to play {player2}? '))
+        except ValueError:
+            print('Invalid choice, please choose a number from 1-9')
+            continue
 
-    place_marker(board_place, choice, computer_marker)
+        if position not in Board:
+            print('Invalid choice, please choose a number from 1-9')
 
-    return choice 
+        elif Board[position] in ['X', 'O']:
+            print('That spot has been taken, please choose another number')
 
-def check_winner():
+    place_marker(Board, position, player2_marker, player=False)
+
+    return position 
+
+def place_marker(Board, position, marker, player=None):
+    """
+    Place the marker on the board 
+    and display the board
+    """
+    Board[position] = marker
+    commons.display_board(Board)
+    # Check for winner
+    check_winner(player)
+
+def check_winner(player):
     # Horizontal wins
     if (
-        board_place[1] == board_place[2] == board_place[3]
+        Board[1] == Board[2] == Board[3]
         ) or (
-            board_place[4] == board_place[5] == board_place[6]
+            Board[4] == Board[5] == Board[6]
             ) or (
-                board_place[7] == board_place[8] == board_place[9]):
-        print('game over')
-    # Verical wins
+                Board[7] == Board[8] == Board[9]):
+        # If Player 1 wins
+        if player:
+            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player}, you won! :party_popper:'))
+            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player}'))
+            print(Style.RESET_ALL)
+        else:
+            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player}, you won! :party_popper:'))
+            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player}'))
+            print(Style.RESET_ALL)
+        # Replay
+        commons.play_again()
+    # Vertical wins
     elif (
-        board_place[1] == board_place[4] == board_place[7]
+        Board[1] == Board[4] == Board[7]
         ) or (
-            board_place[2] == board_place[5] == board_place[8]
+            Board[2] == Board[5] == Board[8]
             ) or (
-                board_place[3] == board_place[6] == board_place[9]):
-        print('game over')
+                Board[3] == Board[6] == Board[9]):
+        # If Player 1 wins
+        if player:
+            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player}, you won! :party_popper:'))
+            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player}'))
+            print(Style.RESET_ALL)
+        else:
+            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player}, you won! :party_popper:'))
+            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player}'))
+            print(Style.RESET_ALL)
+        # Replay
+        commons.play_again()
     # Diagonal wins
     elif (
-        board_place[1] == board_place[5] == board_place[9]
+        Board[1] == Board[5] == Board[9]
         ) or (
-            board_place[3] == board_place[5] == board_place[7]):
-        print('game over')
+            Board[3] == Board[5] == Board[7]):
+        # If Player 1 wins
+        if player:
+            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player}, you won! :party_popper:'))
+            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player}'))
+            print(Style.RESET_ALL)
+        else:
+            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player}, you won! :party_popper:'))
+            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player}'))
+            print(Style.RESET_ALL)
+        # Replay
+        commons.play_again()
 
-def check_tie():
-    """
-    Checks if the board is full
-    """
-    if board_place[position] in ['X', 'O']:
-        print("It's a tie!")
-
-def play_again():
-    """
-    Starts game again if user chooses 'yes'
-    and ends the game if user chooses 'no
-    """
-
-    answer = input('\nDo you want to play again? ').capitalize()
-    while answer not in ['Y', 'N', 'Yes', 'No']:
-        print("I'm sorry, I don't understand")
-        answer = input('Please type Yes or No: ').capitalize()
-
-    if answer in ['Y', 'Yes']:
-        print("Great, let's play again!")
-    else:
-        print('Thanks for playing!')
-        exit()
-
-    return answer 
-
-def swap_turn(turn):
-    """
-    Return the user's marker if it the the user's turn
-    and return the computer's marker if it is the computer's turn
-    """
-    if turn % 2 == 0:
-        return user_marker
-    else:
-        return computer_marker
+def two_player_game():
     
-    turn+=1
+    # Get names of players
+    player1 = get_player1_name()
+    player2 = get_player2_name()
+    # Get Player 1 marker
+    player1_marker = get_player1_marker(player1, player2)
+    # Determine Player 2 marker based on Player 1 marker
+    if player1_marker == 'X':
+        player2_marker = 'O'
+    else:
+        player2_marker = 'X'
+    # Empty line
+    print()
+    # Display board
+    commons.display_board(Board)
 
-def run_game():
-
-    get_user_name()
-
-# run_game()
-
-# while play_game == True:
-
-#     user_marker = get_user_marker()
-#     # Determine computer marker based on user's marker
-#     if user_marker == 'X':
-#         computer_marker = 'O'
-#     else:
-#         computer_marker = 'X'
+    while play_game == True:
+        print()
+        # Where Player 1 wants to play
+        player1_choice(player1_marker, player1)
+        # Where Player 2 wants to play
+        player2_choice(player2_marker, player2)
+    
 
 
-#     display_board(board_place)
-#     # Where the user wants to play
-#     player_choice = player_choice()
-#     # Where the computer wants to play
-#     computer_choice = computer_choice()
-#     # Changes turn
-#     current_player = swap_turn(turn)
-
-#     play_again()
-
-get_player1_name()
