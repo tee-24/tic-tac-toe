@@ -10,9 +10,7 @@
 
 import emoji
 import random
-import colorama
 from colorama import Fore, Back, Style
-
 
 board_place = {1:'1', 2:'2', 3:'3', 4:'4', 5:'5', 6:'6', 7:'7', 8:'8', 9:'9'}
 play_game = True
@@ -36,12 +34,14 @@ def get_user_name():
     player = ''
 
     while len(player) < 3 or not player.isalpha():
-        player = input('\nWhat is your name? ').capitalize()
+        player = input('What is your name? ').capitalize()
 
         if player.isalpha() == False:
-            print('Name can only contain letters, please try again')
+            print(Fore.RED + 'Name can only contain letters, please try again')
+            print(Style.RESET_ALL)
         elif len(player) < 3:
-            print('Name must be a minimum of 3 characters, please try again')
+            print(Fore.RED + 'Name must be a minimum of 3 letters, please try again')
+            print(Style.RESET_ALL)
 
     print(f'\nHi {player}!')
     return player
@@ -56,7 +56,8 @@ def get_user_marker():
         choice = input('Would you like to be X or O? ').upper()
 
         if choice not in ['X','O']:
-            print('Invalid choice, please choose X or O\n')
+            print(Fore.RED + 'Invalid choice, please choose X or O')
+            print(Style.RESET_ALL)
 
     return choice
 
@@ -69,7 +70,7 @@ def display_board(board_place):
     print(f' {board_place[7]} | {board_place[8]} | {board_place[9]}')
 
 
-def player_choice():
+def player_choice(user_marker):
 
     position = ''
 
@@ -77,26 +78,30 @@ def player_choice():
         try:
             position = int(input('Where would you like to play? '))
         except ValueError:
-            print('\nInvalid choice, please choose a number from 1-9')
+            print(Fore.RED + '\nInvalid choice, please choose a number from 1-9')
+            print(Style.RESET_ALL)
             continue
 
         if position not in board_place:
-            print('\nInvalid choice, please choose a number from 1-9')
+            print(Fore.RED + '\nInvalid choice, please choose a number from 1-9')
+            print(Style.RESET_ALL)
 
         elif board_place[position] in ['X', 'O']:
-            print('\nThat spot has been taken, please choose another number')
-
-            # add argument for isdigit()
+            print(Fore.BLUE + '\nThat spot has been taken, please choose another number')
+            print(Style.RESET_ALL)
 
     place_marker(board_place, position, user_marker)
 
     return position 
 
-def computer_choice():
+def computer_choice(computer_marker):
 
     print("\nComputer's turn...\n")
 
-    choice = random.randint(1,9)
+    choice = 0
+
+    while choice not in board_place or board_place[choice] in ['X', 'O']:
+        choice = random.randint(1,9)
 
     place_marker(board_place, choice, computer_marker)
 
@@ -111,7 +116,8 @@ def check_winner():
             ) or (
                 board_place[7] == board_place[8] == board_place[9]):
         print('game over')
-    # Verical wins
+        break
+    # Vertical wins
     elif (
         board_place[1] == board_place[4] == board_place[7]
         ) or (
@@ -119,12 +125,14 @@ def check_winner():
             ) or (
                 board_place[3] == board_place[6] == board_place[9]):
         print('game over')
+        continue
     # Diagonal wins
     elif (
         board_place[1] == board_place[5] == board_place[9]
         ) or (
             board_place[3] == board_place[5] == board_place[7]):
         print('game over')
+        continue
 
 def check_tie(board_place):
   """
@@ -156,32 +164,15 @@ def play_again():
         exit()
 
     return answer 
-
-def swap_turn(turn):
-    """
-    Return the user's marker if it the the user's turn
-    and return the computer's marker if it is the computer's turn
-    """
-    if turn % 2 == 0:
-        return user_marker
-        turn+=1
-    else:
-        return computer_marker
-        turn+=1
+     
     
-    
-
 def run_game():
 
-    print(emoji.emojize(f'Hello! Welcome to Tic Tac Toe :grinning_face_with_big_eyes:\n'))
+    print(emoji.emojize('Hello! Welcome to Tic Tac Toe :grinning_face_with_big_eyes:\n'))
 
     print('First to get 3 in a row wins!')
 
     get_user_name()
-
-run_game()
-
-while play_game == True:
 
     user_marker = get_user_marker()
     # Determine computer marker based on user's marker
@@ -189,16 +180,17 @@ while play_game == True:
         computer_marker = 'O'
     else:
         computer_marker = 'X'
-
+    
     print()
     display_board(board_place)
-    # Where the user wants to play
-    player_choice = player_choice()
-    # Where the computer wants to play
-    computer_choice = computer_choice()
-    # Changes turn
-    current_player = swap_turn(turn)
-    print(turn)
 
+    while play_game == True:
+        print()
+        # Where the user wants to play
+        player_choice(user_marker)
+        # Where the computer wants to play
+        computer_choice(computer_marker)
+    
     play_again()
 
+run_game()
