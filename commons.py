@@ -1,8 +1,10 @@
 from colorama import Fore, Back, Style
 import emoji
+import oneplayer
 
 # Global variables
-Board = {1:'1', 2:'2', 3:'3', 4:'4', 5:'5', 6:'6', 7:'7', 8:'8', 9:'9'}
+board = {1:'1', 2:'2', 3:'3', 4:'4', 5:'5', 6:'6', 7:'7', 8:'8', 9:'9'}
+
 
 def get_num_of_players():
 
@@ -22,41 +24,32 @@ def get_num_of_players():
     
     return answer
 
-def display_board(Board):
+def display_board(board):
     """
     Print out the game board
     """
-    print(f' {Board[1]} | {Board[2]} | {Board[3]}')
-    print(f' {Board[4]} | {Board[5]} | {Board[6]}')
-    print(f' {Board[7]} | {Board[8]} | {Board[9]}')
+    print(f' {board[1]} | {board[2]} | {board[3]}')
+    print(f' {board[4]} | {board[5]} | {board[6]}')
+    print(f' {board[7]} | {board[8]} | {board[9]}')
 
 
-def check_tie(Board):
-  """
-  Will return True if the board is full 
-  or will return False if the board is not full
-  """
+def check_tie(board):
+    """
+    Will return True if the board is full 
+    or will return False if the board is not full
+    """
 
-  for i in range(1,10):
-    if Board[i] not in ['X','O']:
-        return False
-         
+    for key in board:
+        if board[key].isdigit():
+            return False
     return True
 
 
-def play_again():
-    """
-    Starts game again if user chooses 'yes'
-    and ends the game if user chooses 'no
-    """
 
-    answer = input('Do you want to play again? ').capitalize()
-    while answer not in ['Y', 'N', 'Yes', 'No']:
-        print("I'm sorry, I don't understand")
-        answer = input('Please type Yes or No: ').capitalize()
 
-    if answer in ['Y', 'Yes']:
-        print("Great, let's play again!")
-    else:
-        print(Fore.MAGENTA + emoji.emojize('\nThanks for playing! :grinning_face_with_big_eyes:\n'))
-        exit()
+def reset_board(board):
+    """
+    Resets the board to default
+    """
+    for spot in range(1,10):
+        board[spot] = str(spot)

@@ -6,8 +6,10 @@ import random
 from colorama import Fore, Back, Style
 
 # Global variables
-Board = {1:'1', 2:'2', 3:'3', 4:'4', 5:'5', 6:'6', 7:'7', 8:'8', 9:'9'}
+board = {1:'1', 2:'2', 3:'3', 4:'4', 5:'5', 6:'6', 7:'7', 8:'8', 9:'9'}
 play_game = True
+player1 = ''
+player2 = ''
 
 
 def get_player1_name():
@@ -80,20 +82,20 @@ def player1_choice(player1_marker, player1):
 
     position = ''
 
-    while position not in Board or Board[position] in ['X', 'O']:
+    while position not in board or board[position] in ['X', 'O']:
         try:
             position = int(input(f'Where would you like to play {player1}? '))
         except ValueError:
             print('Invalid choice, please choose a number from 1-9')
             continue
 
-        if position not in Board:
+        if position not in board:
             print('Invalid choice, please choose a number from 1-9')
 
-        elif Board[position] in ['X', 'O']:
+        elif board[position] in ['X', 'O']:
             print('That spot has been taken, please choose another number')
 
-    place_marker(Board, position, player1_marker, player=True)
+    place_marker(board, position, player1_marker, mark=True)
 
     return position 
 
@@ -101,92 +103,116 @@ def player2_choice(player2_marker, player2):
 
     position = ''
 
-    while position not in Board or Board[position] in ['X', 'O']:
+    while position not in board or board[position] in ['X', 'O']:
         try:
             position = int(input(f'Where would you like to play {player2}? '))
         except ValueError:
             print('Invalid choice, please choose a number from 1-9')
             continue
 
-        if position not in Board:
+        if position not in board:
             print('Invalid choice, please choose a number from 1-9')
 
-        elif Board[position] in ['X', 'O']:
+        elif board[position] in ['X', 'O']:
             print('That spot has been taken, please choose another number')
 
-    place_marker(Board, position, player2_marker, player=False)
+    place_marker(board, position, player2_marker, mark=False)
 
     return position 
 
-def place_marker(Board, position, marker, player=None):
+def place_marker(board, position, marker, mark=None):
     """
     Place the marker on the board 
     and display the board
     """
-    Board[position] = marker
-    commons.display_board(Board)
+    board[position] = marker
+    commons.display_board(board)
     # Check for winner
-    check_winner(player)
+    check_winner(player1, player2, mark)
 
-def check_winner(player):
+def check_winner(player1, player2, mark):
     # Horizontal wins
     if (
-        Board[1] == Board[2] == Board[3]
+        board[1] == board[2] == board[3]
         ) or (
-            Board[4] == Board[5] == Board[6]
+            board[4] == board[5] == board[6]
             ) or (
-                Board[7] == Board[8] == Board[9]):
+                board[7] == board[8] == board[9]):
         # If Player 1 wins
-        if player:
-            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player}, you won! :party_popper:'))
-            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player}'))
+        if mark:
+            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player1}, you won! :party_popper:'))
+            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player2}'))
             print(Style.RESET_ALL)
         else:
-            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player}, you won! :party_popper:'))
-            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player}'))
+            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player2}, you won! :party_popper:'))
+            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player1}'))
             print(Style.RESET_ALL)
         # Replay
-        commons.play_again()
+        play_again()
     # Vertical wins
     elif (
-        Board[1] == Board[4] == Board[7]
+        board[1] == board[4] == board[7]
         ) or (
-            Board[2] == Board[5] == Board[8]
+            board[2] == board[5] == board[8]
             ) or (
-                Board[3] == Board[6] == Board[9]):
+                board[3] == board[6] == board[9]):
         # If Player 1 wins
         if player:
-            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player}, you won! :party_popper:'))
-            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player}'))
+            print(Fore.GREEN + emoji.emojize(f'\nCongrats , you won! :party_popper:'))
+            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time '))
             print(Style.RESET_ALL)
         else:
-            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player}, you won! :party_popper:'))
-            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player}'))
+            print(Fore.GREEN + emoji.emojize(f'\nCongrats , you won! :party_popper:'))
+            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time '))
             print(Style.RESET_ALL)
         # Replay
-        commons.play_again()
+        play_again()
     # Diagonal wins
     elif (
-        Board[1] == Board[5] == Board[9]
+        board[1] == board[5] == board[9]
         ) or (
-            Board[3] == Board[5] == Board[7]):
+            board[3] == board[5] == board[7]):
         # If Player 1 wins
         if player:
-            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player}, you won! :party_popper:'))
-            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player}'))
+            print(Fore.GREEN + emoji.emojize(f'\nCongrats , you won! :party_popper:'))
+            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time '))
             print(Style.RESET_ALL)
         else:
-            print(Fore.GREEN + emoji.emojize(f'\nCongrats {player}, you won! :party_popper:'))
-            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time {player}'))
+            print(Fore.GREEN + emoji.emojize(f'\nCongrats , you won! :party_popper:'))
+            print(Fore.BLUE + emoji.emojize(f'\nBetter luck next time '))
             print(Style.RESET_ALL)
         # Replay
-        commons.play_again()
+        play_again()
+    elif commons.check_tie(board) is True:
+        print("It's a tie!")
+        # Replay
+        play_again()
+
+def play_again():
+    """
+    Starts game again if user chooses 'yes'
+    and ends the game if user chooses 'no
+    """
+
+    answer = input('Do you want to play again? ').capitalize()
+    while answer not in ['Y', 'N', 'Yes', 'No']:
+        print("I'm sorry, I don't understand")
+        answer = input('Please type Yes or No: ').capitalize()
+    # If user chooses yes
+    if answer in ['Y', 'Yes']:
+        print("Great, let's play again!")
+        one_player_game()
+    # If user chooses no
+    else:
+        print(Fore.MAGENTA + emoji.emojize('\nThanks for playing! :grinning_face_with_big_eyes:\n'))
+        exit()
 
 def two_player_game():
-    
+
     # Get names of players
     player1 = get_player1_name()
     player2 = get_player2_name()
+
     # Get Player 1 marker
     player1_marker = get_player1_marker(player1, player2)
     # Determine Player 2 marker based on Player 1 marker
@@ -197,7 +223,7 @@ def two_player_game():
     # Empty line
     print()
     # Display board
-    commons.display_board(Board)
+    commons.display_board(board)
 
     while play_game == True:
         print()

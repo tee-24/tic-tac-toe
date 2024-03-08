@@ -20,6 +20,7 @@ def run_game():
 
     if player_number == 1:
         # Start one player game
+        oneplayer.get_user_name()
         oneplayer.one_player_game()
     else:
         # Start two player game
